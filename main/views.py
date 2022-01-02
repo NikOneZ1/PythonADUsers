@@ -28,7 +28,12 @@ class GetADUsers(APIView):
                                  connection_data['port'],
                                  connection_data['user'],
                                  connection_data['password'])
-        conn.search('', '(objectclass=person)')
+        group = request.GET.get("group", "")
+        if filter:
+            print(f'{group}', '(objectclass=person)')
+            conn.search(f'{group}', '(objectclass=person)')
+        else:
+            conn.search('', '(objectclass=person)')
         response_data = []
         for entry in conn.entries:
             response_data.append(json.loads(entry.entry_to_json()))
